@@ -4,3 +4,11 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+
+[workspace]
+members = [
+    "config"
+]
+[workspace.dependencies]
+"thiserror" = "2.0.18"
+
