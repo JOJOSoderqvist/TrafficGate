@@ -9,6 +9,8 @@ edition = "2024"
 members = [
     "config"
 ]
+
 [workspace.dependencies]
 "thiserror" = "2.0.18"
-
+tokio = { version = "1.50.0", features = ["full"] }
+async-trait = "0.1.89"
