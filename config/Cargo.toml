@@ -6,7 +6,9 @@ edition = "2024"
 [dependencies]
 yaml-rust2 = "0.11.0"
 atomicwrites = "0.4.4"
+arc-swap = "1.8.2"
 
 thiserror = {workspace = true}
 tokio = {workspace = true}
 async-trait = {workspace = true}
+serde = {workspace = true}

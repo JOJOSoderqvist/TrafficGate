@@ -1,6 +1,5 @@
 pub struct TrafficGateConfig {
     listener: ListenerAddr,
-    admin: AdminAddr,
     upstreams: Vec<Upstream>,
     routes: Vec<Route>,
 }
@@ -9,19 +8,15 @@ pub struct ListenerAddr {
     address: String,
 }
 
-pub struct AdminAddr {
-    address: String,
-}
-
 pub struct Upstream {
     name: String,
     strategy: Strategy,
-    backends: Vec<Backend>
+    backends: Vec<Backend>,
 }
 
 pub struct Backend {
     address: String,
-    weight: Option<usize>
+    weight: Option<usize>,
 }
 
 pub struct Route {
@@ -37,5 +32,5 @@ pub struct RouteMatch {
 pub enum Strategy {
     WeighedRoundRobin,
     LeastConnections,
-    RoundRobin
+    RoundRobin,
 }

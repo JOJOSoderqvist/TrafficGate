@@ -1,5 +1,5 @@
-use std::io;
 use atomicwrites::{AtomicFile, Error};
+use std::io;
 use thiserror::Error;
 use tokio::task::JoinError;
 
@@ -9,6 +9,11 @@ pub(crate) enum ConfigError {
     ConfigError,
 }
 
+#[derive(Error, Debug)]
+pub(crate) enum ValidationError {
+    #[error("validation error happened {0}")]
+    FailedToValidateConfig(String),
+}
 #[derive(Error, Debug)]
 pub(crate) enum StorageError {
     #[error("failed to open file {0}")]
