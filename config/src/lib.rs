@@ -1,8 +1,8 @@
 mod errors;
 pub mod manager;
+pub mod model;
 mod parse;
 mod storage;
-pub mod model;
 
 pub fn add(left: u64, right: u64) -> u64 {
     left + right

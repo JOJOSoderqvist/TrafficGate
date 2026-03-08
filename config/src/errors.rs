@@ -1,18 +1,33 @@
-use atomicwrites::{AtomicFile, Error};
+use crate::model::config::TrafficGateConfig;
+use atomicwrites::Error;
 use std::io;
+use std::sync::Arc;
 use thiserror::Error;
+use tokio::sync::watch::error::SendError;
 use tokio::task::JoinError;
 
 #[derive(Error, Debug)]
-pub(crate) enum ConfigError {
-    #[error("configuration error happened")]
-    ConfigError,
+pub(crate) enum ConfigManagerError {
+    #[error("failed to validate cfg: {0}")]
+    ValidationError(#[from] ValidationError),
+    #[error("failed to parse cfg: {0}")]
+    ParseError(#[from] ParseError),
+    #[error("storage error happened: {0}")]
+    StorageError(#[from] StorageError),
+    #[error("Failed to send cfg through chan: {0}")]
+    SendError(#[source] SendError<Arc<TrafficGateConfig>>),
 }
 
 #[derive(Error, Debug)]
 pub(crate) enum ValidationError {
     #[error("validation error happened {0}")]
     FailedToValidateConfig(String),
+}
+
+#[derive(Error, Debug)]
+pub(crate) enum ParseError {
+    #[error("validation error happened {0}")]
+    FailedToParseConfig(String),
 }
 #[derive(Error, Debug)]
 pub(crate) enum StorageError {
