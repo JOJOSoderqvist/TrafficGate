@@ -1,6 +1,7 @@
 pub mod request;
 pub mod decision;
 pub mod routing_table;
+pub mod router;
 
 pub fn add(left: u64, right: u64) -> u64 {
     left + right

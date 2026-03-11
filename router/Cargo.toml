@@ -5,4 +5,6 @@ edition = "2024"
 
 [dependencies]
 "thiserror" = {workspace = true}
+arc-swap = {workspace = true}
+
 config = {path = "../config"}

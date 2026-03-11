@@ -1,4 +1,5 @@
 use config::model::config::{Route, TrafficGateConfig};
+use crate::request::RequestContext;
 
 pub(crate) struct RouteEntry {
     pub(crate) host: Option<String>,
@@ -10,6 +11,7 @@ pub(crate) struct RouteEntry {
 pub(crate) struct RoutingTable {
     pub entries: Vec<RouteEntry>
 }
+pub type RouteDecision<'a> = &'a str;
 
 impl RoutingTable {
     pub fn from_config(config: &TrafficGateConfig) -> Self {
@@ -33,5 +35,24 @@ impl RoutingTable {
         Self {
             entries,
         }
+    }
+
+    pub fn match_request<'a>(&'a self, req: &RequestContext) -> Option<RouteDecision<'a>> {
+        self.entries
+            .iter()
+            .find(|e| Self::matches(e, req))
+            .map(|m| m.upstream_name.as_str())
+    }
+
+    fn matches<'a>(entry: &RouteEntry, req: &RequestContext) -> bool {
+        let host_matches = match (entry.host.clone(), req.host) {
+            (Some(e), Some(r)) => e == r,
+            (None, _) => true,
+            (_, _) => false,
+        };
+
+        let path_matches = entry.path_prefix.starts_with(req.path);
+
+        host_matches && path_matches
     }
 }

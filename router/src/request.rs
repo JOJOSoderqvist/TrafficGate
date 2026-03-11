@@ -1,4 +1,4 @@
 pub struct RequestContext<'a> {
-    pub host: &'a str,
+    pub host: Option<&'a str>,
     pub path: &'a str,
 }
