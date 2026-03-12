@@ -1,5 +1,5 @@
-use config::model::config::{Route, TrafficGateConfig};
 use crate::request::RequestContext;
+use config::model::config::{Route, TrafficGateConfig};
 
 pub(crate) struct RouteEntry {
     pub(crate) host: Option<String>,
@@ -7,13 +7,12 @@ pub(crate) struct RouteEntry {
     pub(crate) upstream_name: String,
 }
 
-
 pub(crate) struct RoutingTable {
-    pub entries: Vec<RouteEntry>
+    pub entries: Vec<RouteEntry>,
 }
 
 pub struct RouteDecision {
-    pub upstream_name: String
+    pub upstream_name: String,
 }
 
 impl RouteDecision {
@@ -35,19 +34,16 @@ impl RoutingTable {
                 host: route.route_match.host.clone(),
                 path_prefix: route.route_match.path_prefix.clone(),
                 upstream_name: route.upstream_name.clone(),
-            }).collect::<Vec<RouteEntry>>();
+            })
+            .collect::<Vec<RouteEntry>>();
 
-        entries.sort_by(
-            |a, b| {
-                let host_rule = a.host.is_some().cmp(&b.host.is_some()).reverse();
-                let path_len_rule = a.path_prefix.len().cmp(&b.path_prefix.len()).reverse();
-                host_rule.then(path_len_rule)
-            }
-        );
+        entries.sort_by(|a, b| {
+            let host_rule = a.host.is_some().cmp(&b.host.is_some()).reverse();
+            let path_len_rule = a.path_prefix.len().cmp(&b.path_prefix.len()).reverse();
+            host_rule.then(path_len_rule)
+        });
 
-        Self {
-            entries,
-        }
+        Self { entries }
     }
 
     pub fn match_request<'a>(&'a self, req: &RequestContext) -> Option<&str> {
