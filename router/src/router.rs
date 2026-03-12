@@ -22,8 +22,7 @@ impl Router {
         self.routing_table.store(new_table)
     }
 
-    // TODO: Do i need to allocate?
-    pub fn match_request(& self, req: &RequestContext) -> Option<String> {
-        self.routing_table.load().match_request(req).map(|a| a.to_string())
+    pub fn match_request(& self, req: &RequestContext) -> Option<RouteDecision> {
+        self.routing_table.load().match_request(req).map(|a| RouteDecision::new(a))
     }
 }

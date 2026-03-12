@@ -11,7 +11,20 @@ pub(crate) struct RouteEntry {
 pub(crate) struct RoutingTable {
     pub entries: Vec<RouteEntry>
 }
-pub type RouteDecision<'a> = &'a str;
+
+pub struct RouteDecision {
+    pub upstream_name: String
+}
+
+impl RouteDecision {
+    pub(crate) fn new(upstream_name: &str) -> Self {
+        Self {
+            upstream_name: upstream_name.to_string(),
+        }
+    }
+}
+
+// pub type RouteDecision<'a> = &'a str;
 
 impl RoutingTable {
     pub fn from_config(config: &TrafficGateConfig) -> Self {
@@ -37,7 +50,7 @@ impl RoutingTable {
         }
     }
 
-    pub fn match_request<'a>(&'a self, req: &RequestContext) -> Option<RouteDecision<'a>> {
+    pub fn match_request<'a>(&'a self, req: &RequestContext) -> Option<&str> {
         self.entries
             .iter()
             .find(|e| Self::matches(e, req))
@@ -45,13 +58,13 @@ impl RoutingTable {
     }
 
     fn matches<'a>(entry: &RouteEntry, req: &RequestContext) -> bool {
-        let host_matches = match (entry.host.clone(), req.host) {
+        let host_matches = match (entry.host.as_deref(), req.host) {
             (Some(e), Some(r)) => e == r,
             (None, _) => true,
             (_, _) => false,
         };
 
-        let path_matches = entry.path_prefix.starts_with(req.path);
+        let path_matches = req.path.starts_with(&entry.path_prefix);
 
         host_matches && path_matches
     }
