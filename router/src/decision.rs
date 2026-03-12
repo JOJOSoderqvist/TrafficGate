@@ -1,0 +1,1 @@
+pub type RouteDecision<'a> = &'a str;

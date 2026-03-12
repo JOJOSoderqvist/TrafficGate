@@ -7,7 +7,8 @@ edition = "2024"
 
 [workspace]
 members = [
-    "config"
+    "config",
+    "router"
 ]
 
 [workspace.dependencies]
@@ -15,3 +16,4 @@ members = [
 tokio = { version = "1.50.0", features = ["full"] }
 async-trait = "0.1.89"
 serde = { version = "1.0.228", features = ["derive"] }
+arc-swap = "1.8.2"
